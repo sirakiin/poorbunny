@@ -39,7 +39,9 @@ class PoorBunny(object):
                 return result
 
 
-def start_bunny_server(bunny, port=DEFAULT_PORT, errorlog=None, accesslog=None):
+def start_bunny_server(bunny, port=None, errorlog=None, accesslog=None):
+    if not port:
+        port = DEFAULT_PORT
     cherrypy.server.socket_port = port
     cherrypy.config['log.error_file'] = errorlog
     cherrypy.config['log.access_file'] = accesslog
@@ -48,11 +50,11 @@ def start_bunny_server(bunny, port=DEFAULT_PORT, errorlog=None, accesslog=None):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Poor Bunny Server.')
-    parser.add_argument('--port', type=int, default=None, required=False,
+    parser.add_argument('--port', type=int, required=False,
                         help='Port to run')
-    parser.add_argument('--errorlog', type=str, default=None, required=False,
+    parser.add_argument('--errorlog', type=str, required=False,
                         help='errorlog path')
-    parser.add_argument('--accesslog', type=str, default=None, required=False,
+    parser.add_argument('--accesslog', type=str, required=False,
                         help='accesslog path')
     return parser.parse_args()
 
