@@ -11,6 +11,7 @@ PYTHON3_REF = 'https://docs.python.org/3/search.html'
 GOOGLE_SEARCH = 'https://www.google.com/search'
 GOOGLE_MAIL = 'https://mail.google.com/mail/u/'
 DEALMOON = 'http://cn.dealmoon.com/top/'
+CPLUSPLUS = 'http://www.cplusplus.com/search.do'
 
 
 class ResultType(object):
@@ -98,7 +99,13 @@ def gmail(arg):
     :param arg: Account #
     :return:
     """
-    return GOOGLE_MAIL + (arg if arg else '')
+    if not arg:
+        return GOOGLE_MAIL
+    try:
+        account_num, search_content = arg.split(None, 1)
+    except ValueError:
+        account_num, search_content = arg, None
+    return GOOGLE_MAIL + account_num + ('/#search/' + search_content) if search_content else ''
 
 
 @register_content_command
@@ -115,3 +122,9 @@ def _debug(*args, **kwargs):
     else:
         result, _ = real_cmd(*margs, **kwargs)
         return "<code><b>poorbunny</b><br/> DEBUG: redirect to <a href='{url}'>{url}</a></code>".format(url=result)
+
+
+@register_redirection_command
+def cpp(arg):
+    payload = {'q': arg}
+    return Request(url=CPLUSPLUS, params=payload).prepare().url

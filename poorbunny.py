@@ -26,7 +26,10 @@ class PoorBunny(object):
 
     def do_command(self, *args, **kwargs):
         if args:
-            method, margs = args[0].split(None, 1)
+            try:
+                method, margs = args[0].split(None, 1)
+            except ValueError:
+                method = None
             if not method or method not in self.commands.cmd_list:
                 method = DETAULT_CMD
                 margs = args[0]
